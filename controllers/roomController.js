@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const auth = require("../middleware/authenticator");
 
 // all users
 

@@ -1,4 +1,6 @@
 const asyncHandler = require("express-async-handler");
+const auth = require("../middleware/authenticator");
+const val = require("../middleware/validator");
 
 // const gravatar = require("gravatar");
 // const newAvatar = gravatar.url(
