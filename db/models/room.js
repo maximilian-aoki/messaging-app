@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const { messageSchema } = require("./message");
+
 const roomSchema = new mongoose.Schema(
   {
     users: [
@@ -22,10 +24,7 @@ const roomSchema = new mongoose.Schema(
         },
       },
     ],
-    mostRecentMessage: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
-    },
+    mostRecentMessage: messageSchema,
   },
   { timestamps: true }
 );
@@ -34,4 +33,9 @@ roomSchema.virtual("url").get(function () {
   return `/rooms/${this._id}`;
 });
 
-module.exports = mongoose.model("Room", roomSchema);
+const Room = mongoose.model("Room", roomSchema);
+
+module.exports = {
+  Room,
+  roomSchema,
+};
