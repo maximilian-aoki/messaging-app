@@ -34,7 +34,7 @@ app.set("view engine", "ejs");
 //     resave: false,
 //     saveUninitialized: true,
 //     store: MongoStore.create({
-//       mongoUrl: process.env.MONGO_DB_DEV_URI,
+//       mongoUrl: process.env.MONGO_URI,
 //       ttl: 24 * 60 * 60, // 1 day
 //     }),
 //   })

@@ -12,7 +12,7 @@ const auth = require("../middleware/authenticator");
 
 exports.getAllUsers = [
   asyncHandler(async (req, res, next) => {
-    res.send("get all authed user chat rooms");
+    res.send("get all users available for chat room for authed user");
   }),
 ];
 

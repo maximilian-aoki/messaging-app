@@ -1,30 +1,18 @@
 const mongoose = require("mongoose");
 
+const { userSchema } = require("./user");
 const { messageSchema } = require("./message");
 
 const roomSchema = new mongoose.Schema(
   {
-    users: [
-      {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        username: {
-          type: String,
-          required: true,
-          trim: true,
-          maxLength: 20,
-        },
-        avatar: {
-          type: String,
-          trim: true,
-          required: true,
-        },
-      },
-    ],
-    mostRecentMessage: messageSchema,
+    users: {
+      type: [userSchema],
+      required: true,
+    },
+    mostRecentMessage: {
+      type: messageSchema,
+      required: false,
+    },
   },
   { timestamps: true }
 );

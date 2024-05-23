@@ -2,14 +2,6 @@ const asyncHandler = require("express-async-handler");
 const auth = require("../middleware/authenticator");
 const val = require("../middleware/validator");
 
-// const gravatar = require("gravatar");
-// const newAvatar = gravatar.url(
-//   "efverevev",
-//   { s: 100, r: "g", d: "retro" },
-//   true
-// );
-// console.log(newAvatar);
-
 // home chats
 
 // path:        "/"
@@ -21,6 +13,7 @@ const val = require("../middleware/validator");
 
 exports.getUserChatRooms = [
   asyncHandler(async (req, res, next) => {
+    console.log(req.user);
     res.send("get all authed user chat rooms");
   }),
 ];
@@ -46,6 +39,15 @@ exports.getSignUp = (req, res, next) => {
 // redirect:    to "/log-in" on successful sign-up
 
 exports.postSignUp = [
+  val.pipe(
+    [val.validateUsername, val.validateEmail, val.validatePasswordSignup],
+    "signup", // view template
+    "Sign Up", // header
+    "username", // args
+    "email",
+    "password",
+    "passwordConfirm"
+  ),
   asyncHandler(async (req, res, next) => {
     res.send("try to sign up");
   }),
@@ -71,6 +73,13 @@ exports.getLogIn = (req, res, next) => {
 // redirect:    to "/" if successful login
 
 exports.postLogIn = [
+  val.pipe(
+    [val.validateEmail, val.validatePasswordLogin],
+    "login", // view template
+    "Log In", // header
+    "email", // args
+    "password"
+  ),
   asyncHandler(async (req, res, next) => {
     res.send("try to log in");
   }),

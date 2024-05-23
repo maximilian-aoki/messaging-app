@@ -22,12 +22,16 @@ const userSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
-  friends: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  friends: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: false,
+      },
+    ],
+    required: true,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
