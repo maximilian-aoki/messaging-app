@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const auth = require("../middleware/authenticator");
+const { User } = require("../db/models/user");
 
 // all users
 
@@ -13,8 +14,15 @@ const auth = require("../middleware/authenticator");
 exports.getAllUsers = [
   auth.authenticate,
   asyncHandler(async (req, res, next) => {
+    const allAvailUsers = await User.find({
+      _id: { $nin: [...req.user.friends, req.user._id] },
+    })
+      .sort({ username: 1 })
+      .exec();
+
     res.render("addRoom", {
       header: "Add a New Chat",
+      allAvailUsers,
     });
   }),
 ];

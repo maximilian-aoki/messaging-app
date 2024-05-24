@@ -12,7 +12,7 @@ const roomSchema = new mongoose.Schema(
     },
     mostRecentMessage: {
       type: messageSchema,
-      required: false,
+      required: true,
     },
   },
   { timestamps: true }

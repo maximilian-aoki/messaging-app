@@ -5,6 +5,7 @@ const passport = require("../passport");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const { User } = require("../db/models/user");
+const { Room } = require("../db/models/room");
 
 // home chats
 
@@ -18,8 +19,15 @@ const { User } = require("../db/models/user");
 exports.getUserChatRooms = [
   auth.authenticate,
   asyncHandler(async (req, res, next) => {
+    const allOpenRooms = await Room.find({
+      users: { $elemMatch: { _id: req.user._id } },
+    })
+      .sort({ "mostRecentMessage.createdAt": -1 })
+      .exec();
+
     res.render("home", {
       header: "Your Chats",
+      allOpenRooms,
     });
   }),
 ];

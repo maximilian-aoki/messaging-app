@@ -90,10 +90,6 @@ async function addOneRoom(index, users) {
     `adding room ${index} with users '${users[0].username}' and '${users[1].username}'`
   );
 
-  const newRoom = await Room.create({
-    users,
-  });
-
   console.log("making users friends");
   const user1 = await User.findById(users[0]._id).exec();
   const user2 = await User.findById(users[1]._id).exec();
@@ -101,6 +97,13 @@ async function addOneRoom(index, users) {
   user2.friends.push(user1._id);
   await user1.save();
   await user2.save();
+
+  const newRoom = await Room.create({
+    users: [user1, user2],
+    mostRecentMessage: {
+      text: "click here to start new convo!",
+    },
+  });
 
   rooms[index] = newRoom;
 }
