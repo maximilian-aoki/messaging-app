@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MaxyMessage</title>
     <link rel="stylesheet" href="/stylesheets/output.css" />
-    <!-- <script src="/javascripts/socketScript.js"></script> -->
   </head>
   <body class="bg-slate-300 h-screen max-h-screen flex flex-col">
     <header class="bg-slate-200 flex-none flex justify-center">
@@ -77,7 +76,7 @@
               currentUser._id.toString()) { %>
 
               <div class="flex justify-between content-center">
-                <p class="font-bold italic">from @<%= user.username %></p>
+                <p class="font-bold italic">@<%= user.username %></p>
                 <div
                   class="w-6 h-6 rounded-full border-2 border-slate-600 overflow-hidden object-center object-cover"
                 >

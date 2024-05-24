@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MaxyMessage</title>
     <link rel="stylesheet" href="/stylesheets/output.css" />
-    <!-- <script src="/javascripts/socketScript.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/socketClient.js" defer></script>
   </head>
   <body class="bg-slate-300 h-screen max-h-screen flex flex-col">
     <header class="bg-slate-200 flex-none flex justify-center">
@@ -59,45 +60,44 @@
     </nav>
     <main class="bg-slate-300 flex-1 flex justify-center overflow-hidden">
       <div class="flex-1 flex flex-col p-4 gap-2 max-w-[600px] overflow-hidden">
-        <h2 class="flex-none text-lg font-bold"><%= locals.header %></h2>
+        <div class="flex gap-2 items-center">
+          <div
+            class="w-6 h-6 rounded-full border-2 border-slate-600 overflow-hidden object-center object-cover"
+          >
+            <img src="<%= locals.otherUser.avatar %>" alt="gravatar" />
+          </div>
+          <h2 class="flex-none text-lg font-bold italic">
+            <%= locals.header %>
+          </h2>
+        </div>
         <div
           class="flex-initial h-full bg-slate-400 rounded-2xl overflow-hidden flex flex-col"
         >
           <div
             id="chatFrame"
             class="flex-1 flex flex-col gap-2 p-2 h-full overflow-auto"
-          >
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-              quas, laborum cumque vitae repudiandae ad. Commodi expedita quidem
-              rerum pariatur, dolores odit eos delectus laborum voluptate
-              recusandae, dicta, veritatis perferendis?
-            </p>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat
-              vitae ullam blanditiis voluptatem asperiores, ad, architecto
-              minima itaque sint numquam laudantium est perspiciatis perferendis
-              repellendus dolores ipsa iure repudiandae odit!
-            </p>
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Perspiciatis, dolorem. Quae possimus, porro doloribus, explicabo
-              rem velit impedit dolore, excepturi dolores quidem sit officia in
-              quia? Architecto, minus praesentium! Consequuntur.
-            </p>
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolor
-              numquam ut, nesciunt amet, rerum beatae odit quos quasi saepe
-              error reprehenderit neque sit accusantium, eius provident odio
-              fugiat omnis inventore?
-            </p>
-          </div>
+          ></div>
           <form
-            action=""
-            method="POST"
+            id="chatForm"
             class="flex-initial h-auto bg-slate-500 p-2 flex gap-2"
           >
-            <input type="text" class="flex-1 rounded-lg p-2" />
+            <input
+              type="text"
+              id="chatText"
+              required
+              maxlength="200"
+              class="flex-1 rounded-lg p-2"
+            />
+            <input
+              type="hidden"
+              id="chatRoomId"
+              data-chatRoomId="<%= locals.room._id %>"
+            />
+            <input
+              type="hidden"
+              id="userId"
+              data-userId="<%= locals.currentUser._id %>"
+            />
             <input
               type="submit"
               value="Send"

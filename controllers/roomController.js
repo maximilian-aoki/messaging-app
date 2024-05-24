@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const auth = require("../middleware/authenticator");
+const mongoose = require("mongoose");
 const { User } = require("../db/models/user");
+const { Room } = require("../db/models/room");
 
 // all users
 
@@ -38,7 +40,38 @@ exports.getAllUsers = [
 exports.createRoom = [
   auth.authenticate,
   asyncHandler(async (req, res, next) => {
-    res.send("create new room");
+    if (!req.body) {
+      return res.redirect("/users");
+    }
+
+    try {
+      const session = await mongoose.startSession();
+
+      let user1, user2;
+      await mongoose.connection.transaction(
+        async (session) => {
+          user1 = await User.findById(req.user._id).exec();
+          user2 = await User.findById(req.body.userId).exec();
+          user1.friends.push(user2._id);
+          user2.friends.push(user1._id);
+          await user1.save();
+          await user2.save();
+        },
+        { readPreference: "primary" }
+      );
+
+      const newRoom = await Room.create({
+        users: [user1, user2],
+        mostRecentMessage: {
+          text: "click here to start new convo!",
+        },
+      });
+
+      res.redirect(`/rooms/${newRoom._id}`);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   }),
 ];
 
@@ -52,8 +85,22 @@ exports.createRoom = [
 exports.getRoom = [
   auth.authenticate,
   asyncHandler(async (req, res, next) => {
+    const room = await Room.findById(req.params.roomId).exec();
+    if (!room) {
+      return res.redirect("/");
+    }
+
+    let otherUser;
+    room.users.forEach((user) => {
+      if (user._id.toString() !== req.user._id.toString()) {
+        otherUser = user;
+      }
+    });
+
     res.render("room", {
-      header: `Room ${req.params.roomId}`,
+      header: `@${otherUser.username}`,
+      room,
+      otherUser,
     });
   }),
 ];

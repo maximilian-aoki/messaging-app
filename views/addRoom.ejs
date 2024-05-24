@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MaxyMessage</title>
     <link rel="stylesheet" href="/stylesheets/output.css" />
-    <!-- <script src="/javascripts/socketScript.js"></script> -->
   </head>
   <body class="bg-slate-300 h-screen max-h-screen flex flex-col">
     <header class="bg-slate-200 flex-none flex justify-center">
@@ -66,17 +65,24 @@
           <div class="flex-1 flex flex-col gap-2 p-2 h-full overflow-auto">
             <% locals.allAvailUsers.forEach(user => { %>
 
-            <a
-              href="#"
-              class="rounded-lg p-2 bg-slate-200 border-l-4 border-amber-500 flex items-center gap-4"
-            >
+            <form action="/rooms/create" method="POST">
               <div
-                class="w-8 h-8 rounded-full border-2 border-slate-600 overflow-hidden object-center object-cover"
+                class="rounded-lg p-2 bg-slate-200 border-l-4 border-amber-500 flex items-center gap-4"
               >
-                <img src="<%= user.avatar %>" alt="gravatar" />
+                <div
+                  class="w-8 h-8 rounded-full border-2 border-slate-600 overflow-hidden object-center object-cover"
+                >
+                  <img src="<%= user.avatar %>" alt="gravatar" />
+                </div>
+                <p class="font-bold italic">@<%= user.username %></p>
+                <input type="hidden" name="userId" value="<%= user._id %>" />
+                <input
+                  type="submit"
+                  value="Add"
+                  class="rounded-lg px-6 py-1 text-white font-bold bg-blue-500 hover:cursor-pointer hover:bg-blue-400 ml-auto"
+                />
               </div>
-              <p class="font-bold italic">@<%= user.username %></p>
-            </a>
+            </form>
 
             <% }) %>
           </div>
