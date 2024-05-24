@@ -21,6 +21,9 @@ router
   .get(indexController.getLogIn)
   .post(indexController.postLogIn);
 
+/* GET - log-out */
+router.get("/log-out", indexController.logOut);
+
 // ROOM ROUTES
 
 /* GET - all available users to create a chat room with for authed users */

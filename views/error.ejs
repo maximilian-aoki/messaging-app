@@ -1,3 +1,37 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MaxyMessage</title>
+    <link rel="stylesheet" href="/stylesheets/output.css" />
+    <!-- <script src="/javascripts/socketScript.js"></script> -->
+  </head>
+  <body class="bg-slate-300 h-screen max-h-screen flex flex-col">
+    <header class="bg-slate-200 flex-none flex justify-center">
+      <div class="flex-1 flex justify-between items-center p-4 max-w-[600px]">
+        <h1 class="text-xl font-bold">MaxyMessage</h1>
+        <% if (locals.currentUser) { %>
+        <div class="flex gap-2 items-center">
+          <p class="italic">@<%= currentUser.username %></p>
+          <div
+            class="w-10 h-10 rounded-full border-2 border-slate-600 overflow-hidden object-center object-cover"
+          >
+            <img src="<%= currentUser.avatar %>" alt="gravatar" />
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </header>
+    <main class="bg-slate-300 flex-1 flex justify-center overflow-hidden p-4">
+      <div class="flex-1 flex flex-col p-4 max-w-[600px] overflow-hidden">
+        <h1 class="text-2xl font-bold"><%= message %></h1>
+        <h2 class="text-xl"><%= error.status %></h2>
+        <a href="/" class="mt-2 text-white">Back to All Chats</a>
+      </div>
+    </main>
+    <footer class="bg-sky-900 flex-none p-4 grid place-content-center">
+      <p class="text-white italic text-sm">powered by Maximilian Aoki</p>
+    </footer>
+  </body>
+</html>

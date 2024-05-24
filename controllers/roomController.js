@@ -11,8 +11,11 @@ const auth = require("../middleware/authenticator");
 // redirect:    to "/log-in" on failed auth
 
 exports.getAllUsers = [
+  auth.authenticate,
   asyncHandler(async (req, res, next) => {
-    res.send("get all users available for chat room for authed user");
+    res.render("addRoom", {
+      header: "Add a New Chat",
+    });
   }),
 ];
 
@@ -25,6 +28,7 @@ exports.getAllUsers = [
 // redirect:    to "/rooms:/:roomId" on successful creation
 
 exports.createRoom = [
+  auth.authenticate,
   asyncHandler(async (req, res, next) => {
     res.send("create new room");
   }),
@@ -38,7 +42,10 @@ exports.createRoom = [
 // redirect:    to "/log-in" on failed auth
 
 exports.getRoom = [
+  auth.authenticate,
   asyncHandler(async (req, res, next) => {
-    res.send(`get room ${req.params.roomId}`);
+    res.render("room", {
+      header: `Room ${req.params.roomId}`,
+    });
   }),
 ];

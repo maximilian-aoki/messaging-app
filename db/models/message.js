@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { DateTime } = require("luxon");
 
 const messageSchema = new mongoose.Schema(
   {
@@ -20,6 +21,10 @@ const messageSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+messageSchema.virtual("formattedTimestamp").get(function () {
+  return DateTime.fromJSDate(this.createdAt).toFormat("ff");
+});
 
 const Message = mongoose.model("Message", messageSchema);
 

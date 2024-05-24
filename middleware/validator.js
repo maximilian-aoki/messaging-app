@@ -7,7 +7,7 @@ validator.validateUsername = body("username")
   .trim()
   .notEmpty()
   .withMessage("must provide username")
-  .isLength({ max: 20 })
+  .isLength({ max: 10 })
   .withMessage("username cannot exceed 20 chars");
 validator.validateEmail = body("email")
   .trim()

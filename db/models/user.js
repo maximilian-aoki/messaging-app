@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const { DateTime } = require("luxon");
 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
     trim: true,
-    maxLength: 20,
+    maxLength: 10,
   },
   email: {
     type: String,
@@ -32,6 +33,10 @@ const userSchema = new mongoose.Schema({
     ],
     required: true,
   },
+});
+
+userSchema.virtual("formattedTimestamp").get(function () {
+  return DateTime.fromJSDate(this.createdAt).toFormat("ff");
 });
 
 const User = mongoose.model("User", userSchema);

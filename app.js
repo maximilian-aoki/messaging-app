@@ -5,6 +5,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const flash = require("connect-flash");
 const helmet = require("helmet");
 const compression = require("compression");
 
@@ -28,24 +29,25 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // passport initialization
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//     store: MongoStore.create({
-//       mongoUrl: process.env.MONGO_URI,
-//       ttl: 24 * 60 * 60, // 1 day
-//     }),
-//   })
-// );
-// app.use(passport.session());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      ttl: 24 * 60 * 60, // 1 day
+    }),
+  })
+);
+app.use(passport.session());
 
 // security
 app.disable("x-powered-by");
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
+      "script-src": ["'self'"],
       "img-src": ["s.gravatar.com"],
     },
   })
@@ -60,7 +62,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-// app.use(auth.setCurrentUser);
+app.use(flash());
+
+// custom authentication middleware
+app.use(auth.setCurrentUser);
 
 // ROUTES
 app.use("/", indexRouter);
