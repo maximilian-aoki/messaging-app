@@ -18,8 +18,23 @@ const socket = io({
 });
 
 // on incoming message
-socket.on("message", (messageObj) => {
+socket.on("message", (messageObj, pointer) => {
   console.log(messageObj);
+  const newMessage = document.createElement("div");
+  newMessage.setAttribute(
+    "class",
+    "p-2 bg-slate-200 rounded-lg flex flex-col w-fit max-w-[75%]"
+  );
+
+  newMessage.innerHTML = `
+    <p>${messageObj.text}<p>
+    <p class="text-sm italic text-slate-500 text-end">${messageObj.formattedTimestamp}<p>
+  `;
+
+  frame.appendChild(newMessage);
+
+  // increment the client pointer offset
+  socket.auth.offset = pointer;
 });
 
 // form submit listener
@@ -33,8 +48,8 @@ form.addEventListener("submit", (e) => {
       room: roomId,
     };
 
-    console.log(newMessage);
     socket.emit("message", newMessage);
+    textInput.value = "";
   } else {
     console.log("socket disconnected.. try again later");
   }

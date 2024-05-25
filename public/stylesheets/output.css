@@ -622,8 +622,30 @@ video {
   width: 2rem;
 }
 
+.w-5\/6 {
+  width: 83.333333%;
+}
+
+.w-min {
+  width: -moz-min-content;
+  width: min-content;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 .max-w-\[600px\] {
   max-width: 600px;
+}
+
+.max-w-\[75\%\] {
+  max-width: 75%;
 }
 
 .flex-1 {
@@ -789,6 +811,10 @@ video {
   padding-bottom: 0.25rem;
 }
 
+.text-end {
+  text-align: end;
+}
+
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -840,6 +866,16 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-slate-600 {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
+}
+
+.text-slate-500 {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
 }
 
 .shadow-inner {
