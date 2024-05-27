@@ -48,7 +48,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       "script-src": ["'self'"],
-      "img-src": ["s.gravatar.com"],
+      "img-src": ["'self'", "s.gravatar.com"],
     },
   })
 );
