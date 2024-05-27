@@ -22,7 +22,7 @@ exports.getUserChatRooms = [
     const allOpenRooms = await Room.find({
       users: { $elemMatch: { _id: req.user._id } },
     })
-      .sort({ "mostRecentMessage.createdAt": -1 })
+      .sort({ "mostRecentMessage.updatedAt": -1 })
       .exec();
 
     res.render("home", {

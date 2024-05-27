@@ -24,6 +24,10 @@ messageSchema.virtual("formattedTimestamp").get(function () {
   return DateTime.fromJSDate(this.createdAt).toFormat("ff");
 });
 
+messageSchema.virtual("formattedUpdate").get(function () {
+  return DateTime.fromJSDate(this.updatedAt).toFormat("ff");
+});
+
 const Message = mongoose.model("Message", messageSchema);
 
 module.exports = {

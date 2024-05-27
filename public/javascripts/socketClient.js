@@ -1,40 +1,62 @@
-// get current room client is in and client's id
+// get current room info
 const roomId = document
   .getElementById("chatRoomId")
   .getAttribute("data-chatRoomId");
 const userId = document.getElementById("userId").getAttribute("data-userId");
+const initPointer = Number(
+  document.getElementById("initPointer").getAttribute("data-initPointer")
+);
 
 // get elements
 const form = document.getElementById("chatForm");
 const frame = document.getElementById("chatFrame");
 const textInput = document.getElementById("chatText");
 
+// init elements
+frame.scrollTop = frame.scrollHeight;
+
 // init socket
 const socket = io({
   auth: {
-    offset: 0,
+    offset: initPointer,
     roomId: roomId,
   },
 });
 
 // on incoming message
 socket.on("message", (messageObj, pointer) => {
-  console.log(messageObj);
+  // check if message came from client and adjust style accordingly
+  const isMsgFromClient = messageObj.user.toString() === userId;
+  const styleObj = {
+    bgColor: isMsgFromClient ? "bg-blue-500" : "bg-slate-200",
+    textColor: isMsgFromClient ? "text-white" : "",
+    timeColor: isMsgFromClient ? "text-gray-300" : "text-slate-500",
+    layout: isMsgFromClient ? "self-end" : "",
+  };
+
+  // create new message element in client html
   const newMessage = document.createElement("div");
   newMessage.setAttribute(
     "class",
-    "p-2 bg-slate-200 rounded-lg flex flex-col w-fit max-w-[75%]"
+    `${styleObj.bgColor} ${styleObj.layout} p-2 rounded-lg flex flex-col w-fit max-w-[90%]`
   );
 
   newMessage.innerHTML = `
-    <p>${messageObj.text}<p>
-    <p class="text-sm italic text-slate-500 text-end">${messageObj.formattedTimestamp}<p>
+    <p class="${styleObj.textColor}">${messageObj.text}<p>
+    <p class="${styleObj.timeColor} text-sm italic text-end">${messageObj.formattedTimestamp}<p>
   `;
 
+  // append new message element to scroll frame and go to bottom of scroll div
   frame.appendChild(newMessage);
+  frame.scrollTop = frame.scrollHeight;
 
   // increment the client pointer offset
   socket.auth.offset = pointer;
+});
+
+// on error
+socket.on("error", (err) => {
+  console.log(err);
 });
 
 // form submit listener

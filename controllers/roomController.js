@@ -3,6 +3,7 @@ const auth = require("../middleware/authenticator");
 const mongoose = require("mongoose");
 const { User } = require("../db/models/user");
 const { Room } = require("../db/models/room");
+const { Message } = require("../db/models/message");
 
 // all users
 
@@ -90,6 +91,33 @@ exports.getRoom = [
       return res.redirect("/");
     }
 
+    // get all existing messages
+    const dbMessages = await Message.find({ room: room._id })
+      .sort({ createdAt: 1 })
+      .exec();
+
+    // convert messages to useable ejs objs
+    const messageObjs = dbMessages.map((dbMessage) => {
+      const newMessageObj = dbMessage.toObject();
+      const isMsgFromClient =
+        newMessageObj.user.toString() === req.user._id.toString();
+
+      newMessageObj.formattedTimestamp = dbMessage.formattedTimestamp;
+
+      newMessageObj.styleObj = {
+        divClass: isMsgFromClient
+          ? "bg-blue-500 self-end p-2 rounded-lg flex flex-col w-fit max-w-[90%]"
+          : "bg-slate-200 p-2 rounded-lg flex flex-col w-fit max-w-[90%]",
+        textClass: isMsgFromClient ? "text-white" : "",
+        timeClass: isMsgFromClient
+          ? "text-gray-300 text-sm italic text-end"
+          : "text-slate-500 text-sm italic text-end",
+      };
+
+      return newMessageObj;
+    });
+
+    // determine the user on the other side of the convo
     let otherUser;
     room.users.forEach((user) => {
       if (user._id.toString() !== req.user._id.toString()) {
@@ -101,6 +129,8 @@ exports.getRoom = [
       header: `@${otherUser.username}`,
       room,
       otherUser,
+      messageObjs,
+      initPointer: messageObjs.length,
     });
   }),
 ];

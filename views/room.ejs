@@ -28,17 +28,19 @@
       <div class="flex gap-4 justify-center p-2">
         <% if (locals.currentUser) { %>
 
-        <a href="/" class="rounded-lg bg-sky-900 text-white font-bold py-1 px-4"
+        <a
+          href="/"
+          class="rounded-lg bg-sky-900 hover:bg-sky-700 text-white font-bold py-1 px-4"
           >Chats</a
         >
         <a
           href="/users"
-          class="rounded-lg bg-sky-900 text-white font-bold py-1 px-4"
+          class="rounded-lg bg-sky-900 hover:bg-sky-700 text-white font-bold py-1 px-4"
           >Add Chat</a
         >
         <a
           href="/log-out"
-          class="rounded-lg bg-sky-900 text-white font-bold py-1 px-4"
+          class="rounded-lg bg-sky-900 hover:bg-sky-700 text-white font-bold py-1 px-4"
           >Log Out</a
         >
 
@@ -46,12 +48,12 @@
 
         <a
           href="/sign-up"
-          class="rounded-lg bg-sky-900 text-white font-bold py-1 px-4"
+          class="rounded-lg bg-sky-900 hover:bg-sky-700 text-white font-bold py-1 px-4"
           >Sign Up</a
         >
         <a
           href="/log-in"
-          class="rounded-lg bg-sky-900 text-white font-bold py-1 px-4"
+          class="rounded-lg bg-sky-900 hover:bg-sky-700 text-white font-bold py-1 px-4"
           >Log In</a
         >
 
@@ -76,7 +78,16 @@
           <div
             id="chatFrame"
             class="flex-1 flex flex-col gap-2 p-2 h-full overflow-auto"
-          ></div>
+          >
+            <% locals.messageObjs.forEach((msg) => { %>
+            <div class="<%= msg.styleObj.divClass %>">
+              <p class="<%= msg.styleObj.textClass %>"><%= msg.text %></p>
+              <p class="<%= msg.styleObj.timeClass %>">
+                <%= msg.formattedTimestamp %>
+              </p>
+            </div>
+            <% }) %>
+          </div>
           <form
             id="chatForm"
             class="flex-initial h-auto bg-slate-500 p-2 flex gap-2"
@@ -97,6 +108,11 @@
               type="hidden"
               id="userId"
               data-userId="<%= locals.currentUser._id %>"
+            />
+            <input
+              type="hidden"
+              id="initPointer"
+              data-initPointer="<%= locals.initPointer %>"
             />
             <input
               type="submit"
